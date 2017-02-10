@@ -35,19 +35,19 @@ public class AbstractTemplateProxy implements Proxy{
 		return result;
 	}
 
-	public void after() {
+	protected void after() {
 		
 	}
 
-	public void before() {
+	protected void before() {
 		
 	}
 
-	public void error() {
+	protected void error() {
 		
 	}
 
-	public boolean needAdvice(Class<?> targetClass, Method targetMethod) {
+	protected boolean needAdvice(Class<?> targetClass, Method targetMethod) {
 		return true;
 	}
 

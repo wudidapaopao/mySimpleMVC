@@ -60,24 +60,24 @@ public class DispatcherServlet extends HttpServlet {
 				throw new RuntimeException(e);
 			}
 		 Object[] args = null;
-		 Object result = ReflectionUtil.invokeMethod(bean, method, args);
-		 if(result instanceof JspView) {
+		 Object result = ReflectionUtil.invokeMethod(bean, method, args); //暂时不支持方法参数的自动注入
+		 if(result instanceof JspView) { //jsp视图
 			 JspView jv = (JspView) result;
 			 String path = jv.getPath();
 			 if(path != null && path.length() != 0) {
-				 if(true) {//请求forward
+				 if(true) { //请求forward
 					 Map<String, Object> paramMap = jv.getParamMap();
 					 for(Map.Entry<String, Object> entry : paramMap.entrySet()) {
 						 req.setAttribute(entry.getKey(), entry.getValue());
 					 }
-					 req.getRequestDispatcher("???").forward(req, resp);
+					 req.getRequestDispatcher(path).forward(req, resp);
 				 }
-				 else {//请求redirect
-					 resp.sendRedirect("???");
+				 else { //请求redirect,暂时不支持
+					 resp.sendRedirect(path);
 				 }
 			 }
 		 }
-		 else if(result instanceof JsonView) {
+		 else if(result instanceof JsonView) { //返回json数据
 			 PrintWriter writer = resp.getWriter();
 			 JsonView jv = (JsonView) result;
 			 String jsonStr = JsonUtil.getJsonStr(jv);
@@ -93,14 +93,11 @@ public class DispatcherServlet extends HttpServlet {
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
-//		ServletContext servletContext = config.getServletContext();
-//		servletContext.getServletRegistration(servletName)
-//		ServletRegistration a;
-//		a.addMapping(urlPatterns)
 		this.urlMapping = new DefaultUrlMapping();
 		this.urlMapping.init();
 	}
 	
+	//从请求体中获取参数
 	private void getParamsFromBody(InputStream inputStream, Param para) {
 		try {
 			StringBuilder sb = new StringBuilder();

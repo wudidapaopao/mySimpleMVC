@@ -3,7 +3,6 @@ package com.yxz.mySimpleMVC.util;
 import java.io.File;
 import java.io.IOException;
 import java.net.JarURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -26,10 +25,13 @@ public class ClassLoaderUtil {
 		return Thread.currentThread().getContextClassLoader();
 	}
 	
+	/*
+	 * 加载指定包下的所有类
+	 */
 	public static Set<Class<?>> doLoadClass(String basePackage) {
 		Set<Class<?>> sets = new HashSet<Class<?>>();
 		try {
-			String packagePath = basePackage.replace('.', '/');
+			basePackage = basePackage.replace('.', '/');
 			Enumeration<URL> urls = getClassLoader().getResources(basePackage);
 			while(urls.hasMoreElements()) {
 				URL url = urls.nextElement();
@@ -59,6 +61,7 @@ public class ClassLoaderUtil {
 			}
 		} catch (IOException e) {
 			logger.error("", e);
+			throw new RuntimeException(e);
 		}
 		return sets;
 	}
@@ -69,8 +72,11 @@ public class ClassLoaderUtil {
 		if(file.isDirectory()) {
 			String fileName = file.getName();
 			File[] files = file.listFiles();
+			if(!basePackage.endsWith(fileName)) {
+				basePackage += "." + fileName;
+			}
 			for(File f : files) {
-				addFileClass(f, basePackage + "." + fileName, sets);
+				addFileClass(f, basePackage , sets);
 			}
 		}
 		else if(file.isFile()) {
@@ -79,7 +85,7 @@ public class ClassLoaderUtil {
 				return;
 			fileName = fileName.substring(0, fileName.lastIndexOf('.'));
 			String className = basePackage + "." + fileName;
-			Class<?> clazz = getClass(className, false);
+			Class<?> clazz = getClass(className.replace('/', '.'), false);
 			sets.add(clazz);
 		}
 	}
@@ -90,9 +96,13 @@ public class ClassLoaderUtil {
 			clazz = Class.forName(className, auto, getClassLoader());//false表示加载类，但不执行类的静态语句块，以提升加载类的速度
 		} catch (ClassNotFoundException e) {
 			logger.error("failed to load class : " + className);
-			throw new RuntimeException(e);
+			//throw new RuntimeException(e);
 		}
 		return clazz;
 	}
+	
+//	public static void main(String[] args) throws Throwable {
+//		doLoadClass("com.yxz.mySimpleMVC.annotation");
+//	}
 	
 }

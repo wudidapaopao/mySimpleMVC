@@ -16,29 +16,28 @@ import com.yxz.mySimpleMVC.util.TransactionUtil;
 public class TransactionProxy extends AbstractTemplateProxy {
 	
 	private static final Logger logger = LoggerFactory.getLogger(TransactionProxy.class);
+	
+	@Override
+	protected void after() {
+		TransactionUtil.commitTransaction();
+		logger.debug("transaction end");
+	}
 
 	@Override
-	public Object doProxy(ProxyChain proxyChain) throws Throwable {
-		Method targetMethod = proxyChain.getTargetMethod();
-		Class<?> targetClass = proxyChain.getTargetClass();
-		Object result = null;
-		try {
-			if(targetMethod.isAnnotationPresent(Transaction.class)) {
-				TransactionUtil.startTransaction();
-				logger.debug("transaction start");
-				result = proxyChain.doProxyChain();
-				TransactionUtil.commitTransaction();
-				logger.debug("transaction end");
-			}
-			else {
-				result = proxyChain.doProxyChain();
-			}
-		} catch(Exception e) {
-			TransactionUtil.rollbackTransaction();
-			logger.debug("transaction rollback");
-			throw e;
-		}
-		return result;
+	protected void before() {
+		TransactionUtil.startTransaction();
+		logger.debug("transaction start");
+	}
+
+	@Override
+	protected void error() {
+		TransactionUtil.rollbackTransaction();
+		logger.debug("transaction rollback");
+	}
+
+	@Override
+	protected boolean needAdvice(Class<?> targetClass, Method targetMethod) {
+		return targetMethod.isAnnotationPresent(Transaction.class);
 	}
 	
 }

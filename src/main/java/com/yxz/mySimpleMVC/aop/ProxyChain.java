@@ -8,7 +8,7 @@ import net.sf.cglib.proxy.MethodProxy;
 
 /**
  * @author Yu
- * 代理执行链
+ * 动态代理执行链
  */
 public class ProxyChain {
 
@@ -23,7 +23,6 @@ public class ProxyChain {
 
 	public ProxyChain(List<Proxy> proxyList, Object targetObject, Class<?> targetClass, Method targetMethod,
 			Object[] methodParams, MethodProxy methodProxy) {
-		super();
 		this.proxyList = proxyList;
 		this.targetObject = targetObject;
 		this.targetClass = targetClass;
@@ -31,7 +30,7 @@ public class ProxyChain {
 		this.methodParams = methodParams;
 		this.methodProxy = methodProxy;
 	}
-	
+
 	public List<Proxy> getProxyList() {
 		return proxyList;
 	}
@@ -48,13 +47,21 @@ public class ProxyChain {
 		return methodParams;
 	}
 
+	/*
+	 * 链式代理
+	 */
 	public Object doProxyChain() throws Throwable {
 		Object result = null;
 		if(index < this.proxyList.size()) {
 			result = this.proxyList.get(index++).doProxy(this);
 		}
 		else {
-			result = this.methodProxy.invokeSuper(targetObject, methodParams);
+			if(methodProxy != null) { //cglib动态代理
+				result = this.methodProxy.invokeSuper(targetObject, methodParams);
+			}
+			else { //jdk动态代理
+				result = this.targetMethod.invoke(targetObject, methodParams);
+			}
 		}
 		return result;
 	}

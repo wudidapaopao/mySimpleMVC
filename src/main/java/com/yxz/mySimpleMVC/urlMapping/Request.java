@@ -2,7 +2,7 @@ package com.yxz.mySimpleMVC.urlMapping;
 
 /**
  * @author Yu
- *
+ * 请求包装类
  */
 public class Request {
 	

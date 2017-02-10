@@ -16,7 +16,6 @@ public class DocumentReader {
 		beanDefinition.setScope(bean.getAttribute("scope"));
 		beanDefinition.setLazyInit(Boolean.valueOf(bean.getAttribute("lazy-init")));
 		NodeList nodeList = bean.getElementsByTagName("property");
-		PropertyValues pVs = new PropertyValues();
 		for(int i = 0; i < nodeList.getLength(); i++) {
 			Node node = nodeList.item(i);
 			parsePropertyElement(node, beanDefinition);
@@ -46,11 +45,3 @@ public class DocumentReader {
 	}
 
 }
-
-
-
-
-
-
-
-

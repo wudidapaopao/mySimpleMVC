@@ -35,8 +35,12 @@ public class DbUtil {
 		}
 	}
 	
+	//使用TreadLocal封装connection，从而可以保证在一个事务中调用多个方法，但connection是用一个。
 	private static ThreadLocal<Connection> connectionHolder = new ThreadLocal<Connection>();
 	
+	/*
+	 * 获取数据库连接Connection
+	 */
 	public static Connection getConnection() {
 		if(connectionHolder.get() == null) {
 			try {
@@ -70,7 +74,10 @@ public class DbUtil {
         }  
         release(); 
     }
-
+	
+	/*
+	 * 释放数据库连接Connection
+	 */
 	public static void release() {
 		Connection connection = connectionHolder.get();
 		if(connection != null){  

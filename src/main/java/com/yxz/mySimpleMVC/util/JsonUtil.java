@@ -21,6 +21,9 @@ public class JsonUtil {
 	
 	private static final ObjectMapper objectMapper = new ObjectMapper();
 	
+	/*
+	 * java对象转化为json字符串
+	 */
 	public static String getJsonStr(JsonView jv) {
 		Object object = jv.getJsonObject();
 		String jsonStr = null;
@@ -33,14 +36,18 @@ public class JsonUtil {
 		return jsonStr;
 	}
 	
+	/*
+	 * json字符串转化为指定类的java对象
+	 */
 	public static <T> T readJson2Bean(String jsonStr, Class<T> clazz) {
+		T object = null;
 		try {
-			T object = objectMapper.readValue(jsonStr, clazz);
+			object = objectMapper.readValue(jsonStr, clazz);
 		} catch (Exception e) {
 			logger.error("failed to read json", e);
 			throw new RuntimeException(e);
 		} 
-		return null;
+		return object;
 	}
 	
 }

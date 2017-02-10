@@ -39,9 +39,9 @@ public class XmlBeanFactory implements BeanDefinitionRegistry, BeanFactory {
 	private final Map<String, Object> singletonObjects = new ConcurrentHashMap<>();
 	
 	public XmlBeanFactory(String path) {
-		Resource resource = this.resourceLoader.getReource(path);
+		Resource resource = this.resourceLoader.getReource(path); //定位加载配置文件
 		try {
-			this.reader.loadBeanDefiniton(resource);
+			this.reader.loadBeanDefiniton(resource); //将xml文件转化为BeanDefinition
 		} catch (Exception e) {
 			logger.error("failed to build XmlFactory", e);
 			throw new IocFactoyException("failed to build XmlFactory", e);
@@ -130,6 +130,7 @@ public class XmlBeanFactory implements BeanDefinitionRegistry, BeanFactory {
 		return this.beanDefinitionMap.containsKey(name);
 	}
 	
+	//注入bean的属性
 	private void applyPropertyValues(Object bean, PropertyValues pVs, BeanDefinition bd, String name) throws Exception {
 		if(pVs == null)
 			return;
@@ -138,7 +139,7 @@ public class XmlBeanFactory implements BeanDefinitionRegistry, BeanFactory {
 			PropertyValue pv = pvlist.get(i);
 			Object resolvedValue;
 			resolvedValue = resolveValueIfNecessary(pv, bd, name);
-			setPropertyValue(bean, pv.getName(), resolvedValue);
+			setPropertyValue(bean, pv.getName(), resolvedValue); //反射调用set方法注入属性
 		}
 	}
 

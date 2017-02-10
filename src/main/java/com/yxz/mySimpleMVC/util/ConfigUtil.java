@@ -25,7 +25,8 @@ public class ConfigUtil {
          try  {    
             prop.load(in);        
         }  catch  (IOException e) {    
-            logger.error("failed to load config file");
+            logger.error("failed to load config file", e);
+            throw new RuntimeException(e);
         }    
     } 
 	

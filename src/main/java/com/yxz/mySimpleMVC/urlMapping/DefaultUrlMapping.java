@@ -20,7 +20,7 @@ public class DefaultUrlMapping implements UrlMapping {
 	private Map<Request, Handler> urlMap = new HashMap<>();
 	
 	/*
-	 * 初始化url和Action的映射
+	 * 初始化请求和处理器的映射
 	 */
 	public void init() {
 		Set<Class<?>> controllerClasses = AnnotationGet.getControllerClass();
@@ -46,6 +46,9 @@ public class DefaultUrlMapping implements UrlMapping {
 		}
 	}
 	
+	/*
+	 * 获取请求对应的处理器Handler
+	 */
 	public Handler getHandler(HttpServletRequest req) {
 		String url = req.getRequestURI();
 		String method = req.getMethod();

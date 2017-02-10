@@ -23,15 +23,19 @@ public class BeanGet {
 	
 	private static final Map<Class<?>, Object> beanMap = new HashMap<Class<?>, Object>();
 	
+	//初始化bean容器
 	static {
 		Set<Class<?>> sets = AnnotationGet.getBeanClass();
-		for(Class<?> clazz : sets) {
+		for(Class<?> clazz : sets) { //将Service和Controller注解的类注入bean容器中
 			beanMap.put(clazz, ReflectionUtil.getObject(clazz));
 		}
-		beanMap.putAll(AopGet.getAopBeanMap());
-		BeanGet.autoInjected();
+		beanMap.putAll(AopGet.getAopBeanMap()); //将动态代理对象注入bean容器
+		BeanGet.autoInjected(); //自动注入属性
 	}
-
+	
+	/*
+	 * 根据Class类型获取指定bean
+	 */
 	public static Object getBean(Class<?> clazz) throws BeanNotFoundException {
 		if(!beanMap.containsKey(clazz)) {
 			throw new BeanNotFoundException();
@@ -39,6 +43,9 @@ public class BeanGet {
 		return beanMap.get(clazz);
 	}
 	
+	/*
+	 * 自动注入容器管理的对象中Inject注解标记的属性
+	 */
 	public static void autoInjected() {
 		for(Entry<Class<?>, Object> entrySet : beanMap.entrySet()) {
 			Class<?> clazz = entrySet.getKey();

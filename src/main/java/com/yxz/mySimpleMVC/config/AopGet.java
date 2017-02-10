@@ -7,11 +7,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.yxz.mySimpleMVC.annotation.Advice;
 import com.yxz.mySimpleMVC.annotation.Service;
 import com.yxz.mySimpleMVC.aop.Proxy;
 import com.yxz.mySimpleMVC.aop.TransactionProxy;
+import com.yxz.mySimpleMVC.exception.BeanNotFoundException;
 import com.yxz.mySimpleMVC.util.CglibProxyUtil;
+import com.yxz.mySimpleMVC.util.JDKProxyUtil;
 import com.yxz.mySimpleMVC.util.ReflectionUtil;
 import com.yxz.mySimpleMVC.util.TransactionUtil;
 
@@ -21,16 +26,26 @@ import com.yxz.mySimpleMVC.util.TransactionUtil;
  */
 public class AopGet {
 
+	public static final Logger logger = LoggerFactory.getLogger(AopGet.class);
+	
 	/*
 	 * 获得动态代理的class-Object映射map
 	 */
 	public static Map<Class<?>, Object> getAopBeanMap() {
-		Map<Class<?>, List<Proxy>> proxyMap = getProxyMap();
+		Map<Class<?>, List<Proxy>> proxyMap = getProxyMap(); //获取需要被代理的Class类及其相关切面的map
 		Map<Class<?>, Object> aopBeanMap = new HashMap<>();
 		for(Map.Entry<Class<?>, List<Proxy>> entry : proxyMap.entrySet()) {
 			Class<?> clazz = entry.getKey();
 			List<Proxy> proxyList = entry.getValue();
-			Object dynamicProxy = CglibProxyUtil.getDynamicProxy(clazz, proxyList);
+			Object dynamicProxy = CglibProxyUtil.getDynamicProxy(clazz, proxyList); //使用cglib动态代理
+//			Object targetObject;                                                    //使用jdk动态代理
+//			try {
+//				targetObject = BeanGet.getBean(clazz);
+//			} catch (BeanNotFoundException e) {
+//				logger.error("", e);
+//				continue;
+//			}
+//			Object dynamicProxy = JDKProxyUtil.getDynamicProxy(clazz, proxyList, targetObject);
 			aopBeanMap.put(clazz, dynamicProxy);
 		}
 		return aopBeanMap;

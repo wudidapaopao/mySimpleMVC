@@ -1,7 +1,6 @@
 package com.yxz.mySimpleMVC.util;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.slf4j.Logger;
@@ -15,6 +14,9 @@ public class ReflectionUtil {
 	
 	private static final Logger logger = LoggerFactory.getLogger(ReflectionUtil.class); 
 
+	/*
+	 * 获得对应类的实例对象
+	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T getObject(Class<?> clazz) {
 		T object = null;
@@ -27,6 +29,9 @@ public class ReflectionUtil {
 		return object;
 	}
 	
+	/*
+	 * 反射调用对象的方法
+	 */
 	public static Object invokeMethod(Object object, Method method, Object... args) {
 		Object ret = null;
 		try {
@@ -39,6 +44,9 @@ public class ReflectionUtil {
 		return ret;
 	}
 	
+	/*
+	 * 反射设置对象的属性
+	 */
 	public static void setField(Object object, Field field, Object arg) {
 		field.setAccessible(true);
 		try {

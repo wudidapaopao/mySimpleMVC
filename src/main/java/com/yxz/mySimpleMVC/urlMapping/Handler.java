@@ -12,7 +12,6 @@ public class Handler {
 	private Class<?> handlerClass;
 	
 	public Handler(Method method, Class<?> handlerClass) {
-		super();
 		this.method = method;
 		this.handlerClass = handlerClass;
 	}

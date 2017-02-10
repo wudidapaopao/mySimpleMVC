@@ -16,11 +16,14 @@ public class AnnotationGet {
 	
 	private static Set<Class<?>> sets;
 	
-	static {
+	static { //加载basePackage下面所有的类，并存储在sets中
 		String basePackage = ConfigGet.getBasePackage();
 		sets = ClassLoaderUtil.doLoadClass(basePackage);
 	}
 	
+	/*
+	 * 获取Service注解的所有类
+	 */
 	public static Set<Class<?>> getServiceClass() {
 		Set<Class<?>> ret = new HashSet<Class<?>>();
 		for(Class<?> clazz : sets) {
@@ -31,6 +34,9 @@ public class AnnotationGet {
 		return ret;
 	}
 	
+	/*
+	 * 获取Controller注解的所有类
+	 */
 	public static Set<Class<?>> getControllerClass() {
 		Set<Class<?>> ret = new HashSet<Class<?>>();
 		for(Class<?> clazz : sets) {
@@ -41,6 +47,9 @@ public class AnnotationGet {
 		return ret;
 	}
 	
+	/*
+	 * 获取Service和Controller注解的所有类
+	 */
 	public static Set<Class<?>> getBeanClass() {
 		Set<Class<?>> ret = new HashSet<Class<?>>();
 		for(Class<?> clazz : sets) {
@@ -50,7 +59,10 @@ public class AnnotationGet {
 		}
 		return ret;
 	}
-
+	
+	/*
+	 * 获取指定注解的所有类
+	 */
 	public static Set<Class<?>> getClassSetWithAnnotation(Class<? extends Annotation> clazz) {
 		Set<Class<?>> ret = new HashSet<Class<?>>();
 		for(Class<?> cla : sets) {
