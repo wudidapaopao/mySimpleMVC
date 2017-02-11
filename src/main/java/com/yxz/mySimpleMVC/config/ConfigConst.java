@@ -9,7 +9,7 @@ public class ConfigConst {
 	/*
 	 * 配置文件的文件名
 	 */
-	public static final String CONFIG_FILENAME = "myMVC.properties";
+	public static final String CONFIG_FILENAME = "/myMVC.properties";
 	
 	/*
 	 * jsp文件路径

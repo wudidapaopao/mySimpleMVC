@@ -67,7 +67,7 @@ public class AnnotationGet {
 		Set<Class<?>> ret = new HashSet<Class<?>>();
 		for(Class<?> cla : sets) {
 			if(cla.isAnnotationPresent(clazz)) {
-				ret.add(clazz);
+				ret.add(cla);
 			}
 		}
 		return ret;

@@ -22,7 +22,7 @@ public class DbUtil {
 	private static final Logger logger = LoggerFactory.getLogger(DbUtil.class);
 	
 	private static DataSource dataSource;
-	private static final String DB_CONFIG = "dbConfig.properties";
+	private static final String DB_CONFIG = "/dbConfig.properties";
 	
 	static {
 		try {
